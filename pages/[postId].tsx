@@ -14,7 +14,7 @@ export interface PostProps {
 
 export default function Post({ post }: PostProps): ReactNode {
   return (
-    <article className="max-w-[calc(100vw-2rem)]">
+    <article className="max-w-[calc(100vw-4rem)]">
       <Head>
         <title>{post.title}</title>
       </Head>
