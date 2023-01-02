@@ -67,6 +67,14 @@ function Hr({ children }: JSX.IntrinsicElements['hr']) {
   return <hr className="mb-8 mt-8">{children}</hr>
 }
 
+function Code({ children }: JSX.IntrinsicElements['code']) {
+  return <code>{children}</code>
+}
+
+function Pre({ children }: JSX.IntrinsicElements['pre']) {
+  return <pre className="overflow-auto">{children}</pre>
+}
+
 export default function PostContent({ contentMarkdown }: PostContentProps) {
   return (
     <ReactMarkdown
@@ -84,6 +92,8 @@ export default function PostContent({ contentMarkdown }: PostContentProps) {
         li: ListItem,
         a: A,
         hr: Hr,
+        pre: Pre,
+        code: Code,
       }}
     >
       {contentMarkdown}

@@ -1,4 +1,3 @@
-import PostLayout from '../components/postLayout'
 import { GetStaticPaths, GetStaticProps } from 'next'
 import { getAllPostIds, getPostData, PostData } from '../lib/posts'
 import { ReactNode } from 'react'
@@ -15,7 +14,7 @@ export interface PostProps {
 
 export default function Post({ post }: PostProps): ReactNode {
   return (
-    <PostLayout>
+    <article className="max-w-[calc(100vw-2rem)]">
       <Head>
         <title>{post.title}</title>
       </Head>
@@ -47,7 +46,7 @@ export default function Post({ post }: PostProps): ReactNode {
         </div>
         <PostContent contentMarkdown={post.contentMarkdown} />
       </div>
-    </PostLayout>
+    </article>
   )
 }
 
