@@ -15,7 +15,7 @@ export default function PostListItem({ post }: PostListItemProps): JSX.Element {
     <li className="flex flex-col gap-2 max-w-prose">
       <div className="flex flex-col sm:flex-row justify-between gap-2">
         <Link href={`/${post.id}`}>
-          <Heading level={3}>{post.title}</Heading>
+          <Heading level={2}>{post.title}</Heading>
         </Link>
         <Date className="sm:pt-2" dateString={post.date} />
       </div>
