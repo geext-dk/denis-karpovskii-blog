@@ -36,11 +36,6 @@ export default function PostListItem({ post }: PostListItemProps): JSX.Element {
           <ReactMarkdown>{post.excerptMarkdown}</ReactMarkdown>
         </div>
       )}
-      <div>
-        <Link className="text-gray-500" href={`/${post.id}`}>
-          Read more
-        </Link>
-      </div>
     </li>
   )
 }
