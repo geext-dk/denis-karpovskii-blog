@@ -9,6 +9,8 @@ import Heading from './heading'
 import nodeToString from '../lib/utils/nodeToString'
 import Link from './link'
 import stringToId from '../lib/utils/stringToId'
+import Image from 'next/image'
+import remarkUnwrapImages from 'remark-unwrap-images'
 
 export interface PostContentProps {
   contentMarkdown: string
@@ -75,6 +77,18 @@ function Pre({ children }: JSX.IntrinsicElements['pre']) {
   return <pre className="overflow-auto">{children}</pre>
 }
 
+function Img({ src, alt }: JSX.IntrinsicElements['img']) {
+  if (src && alt) {
+    return (
+      <div className="relative h-80">
+        <Image src={src} alt={alt} fill className="object-contain" />
+      </div>
+    )
+  }
+
+  return null
+}
+
 export default function PostContent({ contentMarkdown }: PostContentProps) {
   return (
     <ReactMarkdown
@@ -94,7 +108,9 @@ export default function PostContent({ contentMarkdown }: PostContentProps) {
         hr: Hr,
         pre: Pre,
         code: Code,
+        img: Img,
       }}
+      remarkPlugins={[remarkUnwrapImages]}
     >
       {contentMarkdown}
     </ReactMarkdown>
