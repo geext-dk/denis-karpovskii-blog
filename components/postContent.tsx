@@ -57,7 +57,7 @@ function ListItem({ children }: LiProps): JSX.Element {
 
 function A({ href, children }: JSX.IntrinsicElements['a']): JSX.Element {
   return (
-    <Link className="text-blue-500" href={href || ''}>
+    <Link className="text-blue-600" href={href || ''}>
       {children}
     </Link>
   )
