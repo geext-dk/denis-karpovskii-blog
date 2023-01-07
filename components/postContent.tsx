@@ -1,5 +1,6 @@
 import ReactMarkdown from 'react-markdown'
 import {
+  CodeProps,
   HeadingComponent,
   LiProps,
   OrderedListProps,
@@ -11,6 +12,7 @@ import Link from './link'
 import stringToId from '../lib/utils/stringToId'
 import Image from 'next/image'
 import remarkUnwrapImages from 'remark-unwrap-images'
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
 
 export interface PostContentProps {
   contentMarkdown: string
@@ -69,19 +71,30 @@ function Hr({ children }: JSX.IntrinsicElements['hr']) {
   return <hr className="mb-8 mt-8">{children}</hr>
 }
 
-function Code({ children }: JSX.IntrinsicElements['code']) {
-  return <code>{children}</code>
+function Code({ children, inline, className }: CodeProps) {
+  const match = /language-(\w+)/.exec(className || '')
+  return inline || !match ? (
+    <code>{children}</code>
+  ) : (
+    <SyntaxHighlighter PreTag="div" language={match[1]}>
+      {children as string}
+    </SyntaxHighlighter>
+  )
 }
 
-function Pre({ children }: JSX.IntrinsicElements['pre']) {
-  return <pre className="overflow-auto">{children}</pre>
+function Pre({ children, className, ...props }: JSX.IntrinsicElements['pre']) {
+  return (
+    <pre className={`overflow-auto my-4 ${className || ''}`} {...props}>
+      {children}
+    </pre>
+  )
 }
 
 function Img({ src, alt }: JSX.IntrinsicElements['img']) {
   if (src && alt) {
     return (
-      <div className="relative h-80">
-        <Image src={src} alt={alt} fill className="object-contain" />
+      <div className="relative h-80 my-4">
+        <Image src={src} alt={alt} fill className={`object-contain`} />
       </div>
     )
   }
