@@ -10,7 +10,7 @@ export interface PostData {
   date: string
   tags: string[]
   contentMarkdown: string
-  excerptMarkdown?: string
+  excerpt?: string
 }
 
 interface PageFrontMatter {
@@ -44,7 +44,7 @@ export function getPostData(id: string): PostData {
   return {
     id,
     contentMarkdown: content,
-    excerptMarkdown: matterResult.excerpt,
+    excerpt: matterResult.excerpt,
     title: frontMatter.title,
     date: frontMatter.date,
     tags: frontMatter.tags || [],

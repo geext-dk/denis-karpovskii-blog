@@ -1,7 +1,6 @@
 import Heading from './heading'
 import Date from './date'
 import { PostData } from '../lib/posts'
-import ReactMarkdown from 'react-markdown'
 
 import TagIcon from '../assets/icons/tag.svg'
 import Link from './link'
@@ -31,11 +30,7 @@ export default function PostListItem({ post }: PostListItemProps): JSX.Element {
             : null}
         </div>
       </div>
-      {post.excerptMarkdown && (
-        <div>
-          <ReactMarkdown>{post.excerptMarkdown}</ReactMarkdown>
-        </div>
-      )}
+      {post.excerpt && <div>{post.excerpt}</div>}
     </li>
   )
 }

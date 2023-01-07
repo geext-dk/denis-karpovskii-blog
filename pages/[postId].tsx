@@ -17,6 +17,7 @@ export default function Post({ post }: PostProps): ReactNode {
     <article className="max-w-[calc(100vw-4rem)]">
       <Head>
         <title>{post.title}</title>
+        <meta name="description" content={post.excerpt} />
       </Head>
 
       <div className="max-w-prose">
