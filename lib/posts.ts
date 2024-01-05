@@ -1,8 +1,10 @@
-import path from 'path'
 import * as fs from 'fs'
 import matter from 'gray-matter'
+import path from 'path'
 
 const postsDirectory = path.join(process.cwd(), 'posts')
+const draftsDirectoryName = 'drafts'
+const draftsDirectory = path.join(postsDirectory, draftsDirectoryName)
 
 export interface PostData {
   id: string
@@ -19,9 +21,55 @@ interface PageFrontMatter {
   tags?: string[]
 }
 
+const postFileNameRegex = /\d{4}-\d{2}-\d{2}-[-a-z]+\.md/
+
+const draftsEnabled = process.env.NODE_ENV === 'development'
+
+function fileNameToPostId(fileName: string): string {
+  if (!postFileNameRegex.test(fileName)) {
+    throw new Error(`The post with file name ${fileName} has invalid name`)
+  }
+
+  const fileNameWithoutExtension = fileName.substring(
+    0,
+    fileName.lastIndexOf('.')
+  )
+
+  return fileNameWithoutExtension.split('-').slice(3).join('-')
+}
+
+function getAllPostFileNames(): string[] {
+  let fileNames = fs
+    .readdirSync(postsDirectory)
+    .filter((fn) => fn != draftsDirectoryName)
+
+  if (draftsEnabled) {
+    fileNames = [...fs.readdirSync(draftsDirectory), ...fileNames]
+  }
+
+  return fileNames
+}
+
 export function getPostData(id: string): PostData {
-  const fullPath = path.join(postsDirectory, `${id}.md`)
-  const fileContents = fs.readFileSync(fullPath, 'utf-8')
+  const fileName = getAllPostFileNames().find(
+    (fn) => fileNameToPostId(fn) == id
+  )
+
+  if (!fileName) {
+    throw new Error(`Couldn't find post with id ${id}`)
+  }
+
+  const fullPath = path.join(postsDirectory, fileName)
+  const draftPath = path.join(draftsDirectory, fileName)
+  const fileContents = fs.existsSync(fullPath)
+    ? fs.readFileSync(fullPath, 'utf-8')
+    : draftsEnabled && fs.existsSync(draftPath)
+    ? fs.readFileSync(draftPath, 'utf-8')
+    : null
+
+  if (!fileContents) {
+    throw new Error(`Couldn't find file with name ${fileName}`)
+  }
 
   const matterResult = matter(fileContents, {
     excerpt: true,
@@ -52,14 +100,13 @@ export function getPostData(id: string): PostData {
 }
 
 export function getAllPostsSorted(): PostData[] {
-  const fileNames = fs.readdirSync(postsDirectory)
+  const postIds = getAllPostIds()
+
   const allPostsData: PostData[] = []
 
-  for (const fileName of fileNames) {
-    const id = fileName.substring(0, fileName.lastIndexOf('.'))
-
+  for (const postId of postIds) {
     try {
-      const postData = getPostData(id)
+      const postData = getPostData(postId)
       allPostsData.push(postData)
     } catch (e) {
       if (e instanceof Error) {
@@ -78,7 +125,5 @@ export function getAllPostsSorted(): PostData[] {
 }
 
 export function getAllPostIds(): string[] {
-  const fileNames = fs.readdirSync(postsDirectory)
-
-  return fileNames.map((fn) => fn.substring(0, fn.lastIndexOf('.')))
+  return getAllPostFileNames().map(fileNameToPostId)
 }

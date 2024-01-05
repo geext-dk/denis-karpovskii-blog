@@ -1,12 +1,9 @@
 import { GetStaticPaths, GetStaticProps } from 'next'
-import { getAllPostIds, getPostData, PostData } from '../lib/posts'
-import { ReactNode } from 'react'
 import Head from 'next/head'
+import { ReactNode } from 'react'
 import PostContent from '../components/postContent'
-import Heading from '../components/heading'
-import stringToId from '../lib/utils/stringToId'
-import TagIcon from '../assets/icons/tag.svg'
-import Link from '../components/link'
+import PostSummary from '../components/postSummary'
+import { PostData, getAllPostIds, getPostData } from '../lib/posts'
 
 export interface PostProps {
   post: PostData
@@ -21,30 +18,12 @@ export default function Post({ post }: PostProps): ReactNode {
       </Head>
 
       <div className="max-w-prose">
-        <div className="pb-8 flex flex-col gap-4">
-          <Heading id={stringToId(post.title)} level={1}>
-            {post.title}
-          </Heading>
-          <div className="flex justify-between">
-            <div>{post.date}</div>
-            <div className="flex items-center gap-2 text-gray-500">
-              <div className="flex gap-2">
-                {post.tags.length > 0
-                  ? post.tags.map((tag) => (
-                      <Link
-                        href={`/tag/${tag}`}
-                        key={tag}
-                        className="text-gray-500"
-                      >
-                        {tag}
-                      </Link>
-                    ))
-                  : null}
-              </div>
-              <TagIcon className="w-[1.25em] h-[1.25em] mt-1" />
-            </div>
-          </div>
-        </div>
+        <PostSummary
+          className="mb-2"
+          post={post}
+          linkableTitle={false}
+          titleLevel={1}
+        />
         <PostContent contentMarkdown={post.contentMarkdown} />
       </div>
     </article>

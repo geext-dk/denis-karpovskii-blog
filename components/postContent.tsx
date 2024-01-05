@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import ReactMarkdown from 'react-markdown'
 import {
   CodeProps,
@@ -6,13 +7,12 @@ import {
   OrderedListProps,
   UnorderedListProps,
 } from 'react-markdown/lib/ast-to-react'
-import Heading from './heading'
-import nodeToString from '../lib/utils/nodeToString'
-import Link from './link'
-import stringToId from '../lib/utils/stringToId'
-import Image from 'next/image'
-import remarkUnwrapImages from 'remark-unwrap-images'
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
+import remarkUnwrapImages from 'remark-unwrap-images'
+import nodeToString from '../lib/utils/nodeToString'
+import stringToId from '../lib/utils/stringToId'
+import Heading from './heading'
+import Link from './link'
 
 export interface PostContentProps {
   contentMarkdown: string
@@ -33,7 +33,7 @@ const MarkdownHeading: HeadingComponent = ({ level, ...props }) => {
   const padding = headingPaddings[level] || headingPaddings[1]
 
   return (
-    <Heading id={headingId} level={level - 1} className={`${padding}`}>
+    <Heading id={headingId} level={level + 1} className={`${padding}`}>
       {props.children}
     </Heading>
   )
